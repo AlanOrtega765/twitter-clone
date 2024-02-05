@@ -1,13 +1,5 @@
 <script setup lang="ts">
-useHead({
-  script: [
-    {
-      src: 'https://www.google.com/recaptcha/api.js',
-      async: 'true',
-      defer: 'true',
-    },
-  ],
-});
+type Step = 'create-account' | 'recaptcha';
 
 const emits = defineEmits<{
   (e: 'closeModal'): void;
@@ -16,13 +8,12 @@ const emits = defineEmits<{
 const { recaptchaSiteKey } = useRuntimeConfig().public;
 const { registerSchema } = useJoiSchemas();
 
-const user = ref({
-  name: '',
-  email: '',
-  password: '',
-});
+const step = ref<Step>('recaptcha');
+const recaptchaRef = ref(null);
 
-const submitHandler = () => {};
+const recaptchaCallback = () => {
+  console.log('Recaptcha cargado!');
+};
 </script>
 
 <template>
@@ -41,39 +32,11 @@ const submitHandler = () => {};
           <Icon name="charm:cross" size="32" />
         </button>
       </div>
-      <UForm
-        class="px-14 py-10"
-        :schema="registerSchema"
-        :state="user"
-        @submit="submitHandler"
-      >
-        <h1 class="text-2xl font-bold">Crea tu cuenta</h1>
-        <div class="grid gap-y-6 mt-4">
-          <UFormGroup label="Nombre">
-            <UInput v-model="user.name" size="xl" color="gray" />
-          </UFormGroup>
-          <UFormGroup label="Correo Electrónico">
-            <UInput v-model="user.email" size="xl" color="gray" />
-          </UFormGroup>
-          <div>
-            <h2 class="text-lg font-medium">Fecha de nacimiento</h2>
-            <span class="block text-sm text-zinc-400 leading-[16px]"
-              >Esta información no será pública. Confirma tu propia edad,
-              incluso si esta cuenta es para una empresa, una mascota u otra
-              cosa.</span
-            >
-            <div class="grid grid-cols-3">
-              <UFormGroup label="Mes">
-                <UInput
-                  v-model="user.email"
-                  size="xl"
-                  color="gray"
-                />
-              </UFormGroup>
-            </div>
-          </div>
-        </div>
-      </UForm>
+      <FormsCreateAccount
+        v-if="step === 'create-account'"
+        @change-step="step = 'recaptcha'"
+      />
+      <div v-if="step === 'recaptcha'"></div>
     </div>
   </div>
 </template>
