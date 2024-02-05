@@ -1,23 +1,18 @@
 <script setup lang="ts">
 type Step = 'create-account' | 'recaptcha';
 
-useHead({
-  script: [
-    {
-      src: 'https://www.google.com/recaptcha/api.js',
-      async: 'true',
-      defer: 'true',
-    },
-  ],
-});
-
 const emits = defineEmits<{
   (e: 'closeModal'): void;
 }>();
 
 const { recaptchaSiteKey } = useRuntimeConfig().public;
 
-const step = ref<Step>('create-account');
+const step = ref<Step>('recaptcha');
+const recaptchaRef = ref(null);
+
+const recaptchaCallback = () => {
+  console.log('Recaptcha cargado!');
+};
 </script>
 
 <template>
@@ -42,9 +37,7 @@ const step = ref<Step>('create-account');
         v-if="step === 'create-account'"
         @change-step="step = 'recaptcha'"
       />
-      <div v-if="step === 'recaptcha'">
-        <div class="g-recaptcha" :data-sitekey="recaptchaSiteKey"></div>
-      </div>
+      <div v-if="step === 'recaptcha'"></div>
     </div>
   </div>
 </template>
