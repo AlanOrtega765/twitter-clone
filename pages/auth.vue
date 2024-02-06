@@ -11,6 +11,9 @@ const isOpenSignInModal = ref(false);
 const signInOAuth = async (provider: any) => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider,
+    options: {
+      redirectTo: 'http://localhost:3000/redirect',
+    }
   });
 
   if (error) return console.log(error);
@@ -27,14 +30,14 @@ const signInOAuth = async (provider: any) => {
           @click="signInOAuth('google')"
         >
           <Icon name="logos:google-icon" size="24" />
-          <span>Registrarse con Google</span>
+          <span>Iniciar Sesión con Google</span>
         </button>
         <button
           class="flex items-center justify-center gap-x-4 w-1/2 py-3 rounded-full bg-white hover:bg-gray-200 transition-colors text-black"
-          @click="signInOAuth('apple')"
+          @click="signInOAuth('github')"
         >
-          <Icon name="logos:apple" size="24" />
-          <span>Registrarse con Apple</span>
+          <Icon name="logos:github-icon" size="24" />
+          <span>Iniciar Sesión con Github</span>
         </button>
       </div>
       <div class="flex items-center gap-x-4">

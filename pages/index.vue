@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient();
 
-const logOut = () => {
-  supabase.auth.signOut();
-  navigateTo('/login');
+const logOut = async () => {
+  await supabase.auth.signOut();
+  navigateTo('/auth');
 };
 </script>
 

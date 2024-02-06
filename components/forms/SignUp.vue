@@ -45,7 +45,7 @@ const submitHandler = async (event: FormSubmitEvent<any>) => {
         username: credentials.username,
         dateOfBirth: credentials.dateOfBirth,
       },
-      emailRedirectTo: 'http://localhost:3000/confirm',
+      emailRedirectTo: 'http://localhost:3000/redirect',
     },
   });
 
@@ -89,7 +89,7 @@ const submitHandler = async (event: FormSubmitEvent<any>) => {
             >Esta información no será pública. Confirma tu propia edad, incluso
             si esta cuenta es para una empresa, una mascota u otra cosa.</span
           >
-          <div class="grid grid-cols-10 gap-x-4 mt-2">
+          <div class="grid grid-cols-10 gap-x-2 mt-2">
             <UFormGroup class="col-span-5" label="Mes" name="dateOfBirth.month">
               <USelectMenu
                 v-model="user.dateOfBirth.month"

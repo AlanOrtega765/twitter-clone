@@ -9,7 +9,7 @@ const emits = defineEmits<{
     class="fixed top-0 left-0 bg-white/20 backdrop-blur-[2px] flex justify-center items-center h-full w-full animate-fade animate-duration-300 px-4"
   >
     <div
-      class="flex flex-col flex-grow relative h-[700px] bg-black rounded-2xl p-10 max-w-[600px]"
+      class="flex flex-col flex-grow relative h-[90%] bg-black rounded-2xl p-4 max-w-[600px] overflow-auto"
     >
       <div class="flex items-center">
         <IconsTwitter
