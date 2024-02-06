@@ -1,5 +1,15 @@
+<script setup lang="ts">
+const supabase = useSupabaseClient();
+
+const logOut = () => {
+  supabase.auth.signOut();
+  navigateTo('/login');
+};
+</script>
+
 <template>
   <div>
     <h1>Home</h1>
+    <button @click="logOut">Cerrar Sesión</button>
   </div>
 </template>

@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
     '@pinia/nuxt',
-    // '@nuxtjs/supabase',
+    '@nuxtjs/supabase',
     '@nuxtjs/google-fonts',
   ],
   googleFonts: {
@@ -21,5 +21,11 @@ export default defineNuxtConfig({
   },
   colorMode: {
     preference: 'light',
+  },
+  supabase: {
+    redirectOptions: {
+      login: '/login',
+      callback: '/confirm',
+    },
   },
 });

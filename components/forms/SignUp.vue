@@ -7,31 +7,56 @@ const emits = defineEmits<{
 
 const { registerSchema } = useJoiSchemas();
 const { months, days, years } = useDate();
+const supabase = useSupabaseClient();
 
 const user = ref({
-  name: '',
+  username: '',
   email: '',
+  password: '',
   dateOfBirth: {
     day: '',
     month: '',
     year: '',
   },
 });
-
-const submitHandler = (event: FormSubmitEvent<any>) => {
-  console.log(event.data);
-  emits('changeStep');
-};
+const loading = ref(false);
+const disabled = ref(false);
 
 const isNextButtonDisabled = computed(() => {
   return (
-    user.value.name === '' ||
+    user.value.username === '' ||
     user.value.email === '' ||
     user.value.dateOfBirth.day === '' ||
     user.value.dateOfBirth.month === '' ||
     user.value.dateOfBirth.year === ''
   );
 });
+
+const submitHandler = async (event: FormSubmitEvent<any>) => {
+  loading.value = true;
+  disabled.value = true;
+  const credentials = event.data;
+
+  const { error } = await supabase.auth.signUp({
+    email: credentials.email,
+    password: credentials.password,
+    options: {
+      data: {
+        username: credentials.username,
+        dateOfBirth: credentials.dateOfBirth,
+      },
+      emailRedirectTo: 'http://localhost:3000/confirm',
+    },
+  });
+
+  if (error) {
+    loading.value = false;
+    disabled.value = false;
+    return console.log(error.message);
+  }
+
+  emits('changeStep');
+};
 </script>
 
 <template>
@@ -44,11 +69,19 @@ const isNextButtonDisabled = computed(() => {
     <h1 class="text-2xl font-bold">Crea tu cuenta</h1>
     <div class="flex flex-col flex-grow justify-between mt-4">
       <div class="flex flex-col gap-y-6">
-        <UFormGroup label="Nombre" name="name">
-          <UInput v-model="user.name" size="xl" color="gray" />
+        <UFormGroup label="Nombre" name="username">
+          <UInput v-model="user.username" size="xl" color="gray" />
         </UFormGroup>
         <UFormGroup label="Correo Electrónico" name="email">
           <UInput v-model="user.email" size="xl" color="gray" />
+        </UFormGroup>
+        <UFormGroup label="Contraseña" name="password">
+          <UInput
+            v-model="user.password"
+            size="xl"
+            color="gray"
+            type="password"
+          />
         </UFormGroup>
         <div>
           <h2>Fecha de nacimiento</h2>
@@ -86,12 +119,13 @@ const isNextButtonDisabled = computed(() => {
       </div>
     </div>
     <UButton
-      class="transition-colors"
+      class="transition-colors mt-10"
       size="xl"
       block
       color="gray"
       type="submit"
-      :disabled="isNextButtonDisabled"
+      :loading="loading"
+      :disabled="isNextButtonDisabled ? isNextButtonDisabled : disabled"
       >Siguiente</UButton
     >
   </UForm>
